@@ -17,10 +17,24 @@ public struct OrderedPlistEncoder {
         try encodeToXML(value).xmlString
     }
 
-    /// Encodes a value to an ordered XML property list as `XMLElement`.
-    public func encodeToXML<Value>(_ value: Value) throws -> XMLElement where Value: Encodable {
+    /// Encodes a value to an ordered XML property list as `XMLDocument`.
+    public func encodeToXML<Value>(_ value: Value) throws -> XMLDocument where Value: Encodable {
         let encoder = OrderedPlistEncoderImpl()
         try value.encode(to: encoder)
-        return encoder.element
+
+        let dtd = XMLDTD()
+        dtd.name = "plist"
+        dtd.publicID = "-//Apple//DTD PLIST 1.0//EN"
+        dtd.systemID = "http://www.apple.com/DTDs/PropertyList-1.0.dtd"
+
+        let rootElement = XMLElement(name: "plist")
+        rootElement.addAttribute(XMLNode.attribute(withName: "version", stringValue: "1.0") as! XMLNode)
+        rootElement.addChild(encoder.element)
+
+        let document = XMLDocument()
+        document.dtd = dtd
+        document.addChild(rootElement)
+
+        return document
     }
 }

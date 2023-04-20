@@ -2,6 +2,7 @@ import XCTest
 @testable import OrderedPlistEncoder
 
 final class OrderedPlistEncoderTests: XCTestCase {
-    func testExample() throws {
+    func testEncoding() throws {
+        // TODO
     }
 }
