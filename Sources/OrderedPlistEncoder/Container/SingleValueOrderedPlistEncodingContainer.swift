@@ -4,7 +4,7 @@ import FoundatiomXML
 #endif
 
 struct SingleValueOrderedPlistEncodingContainer: SingleValueEncodingContainer {
-    private var element: XMLElement
+    private let element: XMLElement
     private(set) var codingPath: [any CodingKey]
 
     init(element: XMLElement, codingPath: [any CodingKey]) {
@@ -85,8 +85,7 @@ struct SingleValueOrderedPlistEncodingContainer: SingleValueEncodingContainer {
     }
 
     mutating func encode<T>(_ value: T) throws where T: Encodable {
-        let encoder = OrderedPlistEncoderImpl(codingPath: codingPath)
+        let encoder = OrderedPlistEncoderImpl(element: element, codingPath: codingPath)
         try value.encode(to: encoder)
-        element = encoder.element
     }
 }

@@ -4,8 +4,8 @@ import FoundatiomXML
 #endif
 
 struct UnkeyedOrderedPlistEncodingContainer: UnkeyedEncodingContainer {
-    private var element: XMLElement
-    private(set) var codingPath: [any CodingKey]
+    private let element: XMLElement
+    let codingPath: [any CodingKey]
     private(set) var count: Int = 0
 
     init(element: XMLElement, codingPath: [any CodingKey]) {

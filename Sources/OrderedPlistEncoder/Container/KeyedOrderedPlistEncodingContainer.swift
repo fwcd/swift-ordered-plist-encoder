@@ -4,8 +4,8 @@ import FoundatiomXML
 #endif
 
 struct KeyedOrderedPlistEncodingContainer<Key>: KeyedEncodingContainerProtocol where Key: CodingKey {
-    private var element: XMLElement
-    private(set) var codingPath: [any CodingKey]
+    private let element: XMLElement
+    let codingPath: [any CodingKey]
 
     init(element: XMLElement, codingPath: [any CodingKey]) {
         self.element = element
