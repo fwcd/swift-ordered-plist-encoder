@@ -2,8 +2,8 @@ import XCTest
 @testable import OrderedPlistEncoder
 
 private struct X: Codable, Hashable {
-    let a: Int
     let b: String
+    let a: Int
     let c: Int
 }
 
@@ -16,7 +16,7 @@ final class OrderedPlistEncoderTests: XCTestCase {
         try assertRoundtrips(" a string with  \nspaces and stuff   ")
         try assertRoundtrips([1, -9, 3])
         try assertRoundtrips(["hello": "a", "world": "b"])
-        try assertRoundtrips(X(a: 3, b: "abc", c: -9))
+        try assertRoundtrips(X(b: "abc", a: 3, c: -9))
     }
 
     private func assertRoundtrips<Value>(_ value: Value, line: UInt = #line) throws where Value: Codable & Equatable {
