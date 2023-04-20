@@ -9,7 +9,7 @@ struct OrderedPlistEncoderImpl: Encoder {
 
     private(set) var element: XMLElement
 
-    init(element: XMLElement = .init(), codingPath: [any CodingKey]) {
+    init(element: XMLElement = .init(), codingPath: [any CodingKey] = []) {
         self.element = element
         self.codingPath = codingPath
     }
