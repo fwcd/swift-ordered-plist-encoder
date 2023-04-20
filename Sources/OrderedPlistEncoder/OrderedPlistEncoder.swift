@@ -2,7 +2,29 @@ import Foundation
 
 /// An encoder that encodes to an ordered XML property list.
 public struct OrderedPlistEncoder {
-    public init() {}
+    public struct OutputFormatting: OptionSet {
+        public let rawValue: UInt
+
+        public static let prettyPrinted = Self(rawValue: 1 << 0)
+
+        var xmlOptions: XMLNode.Options {
+            var xmlOptions: XMLNode.Options = []
+            if contains(.prettyPrinted) {
+                xmlOptions.insert(.nodePrettyPrint)
+            }
+            return xmlOptions
+        }
+
+        public init(rawValue: UInt) {
+            self.rawValue = rawValue
+        }
+    }
+
+    public var options: OutputFormatting
+
+    public init(options: OutputFormatting = []) {
+        self.options = options
+    }
 
     /// Encodes a value to an ordered XML property list to UTF-8-encoded data.
     public func encode<Value>(_ value: Value) throws -> Data where Value: Encodable {
@@ -14,7 +36,7 @@ public struct OrderedPlistEncoder {
 
     /// Encodes a value to an ordered XML property list as `String`.
     public func encodeToString<Value>(_ value: Value) throws -> String where Value: Encodable {
-        try encodeToXML(value).xmlString(options: .nodeCompactEmptyElement)
+        try encodeToXML(value).xmlString(options: .nodeCompactEmptyElement.union(options.xmlOptions))
     }
 
     /// Encodes a value to an ordered XML property list as `XMLDocument`.
