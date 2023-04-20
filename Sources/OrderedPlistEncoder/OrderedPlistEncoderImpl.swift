@@ -7,6 +7,11 @@ struct OrderedPlistEncoderImpl: Encoder {
     let codingPath: [any CodingKey]
     var userInfo: [CodingUserInfoKey: Any] { [:] }
 
+    // Implementation note: We make pretty heavy use of the fact that
+    // XML types such as `XMLElement` have reference semantics (that
+    // lets encoders 'reference' a part of the tree and e.g. later encode
+    // more values into it).
+
     private(set) var element: XMLElement
 
     init(element: XMLElement = .init(), codingPath: [any CodingKey] = []) {
