@@ -11,7 +11,7 @@ struct KeyedOrderedPlistEncodingContainer<Key>: KeyedEncodingContainerProtocol w
         self.element = element
         self.codingPath = codingPath
 
-        element.name = "array"
+        element.name = "dict"
     }
 
     private mutating func addChildElement(forKey key: Key) -> XMLElement {
