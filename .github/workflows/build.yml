@@ -13,7 +13,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: ['ubuntu-latest', 'macos-latest']
+        # TODO: Support Linux Foundation
+        # os: ['ubuntu-latest', 'macos-latest']
+        os: ['macos-latest']
         swift: ['5.7']
 
     steps:
