@@ -1,6 +1,6 @@
 import Foundation
 #if canImport(FoundationXML)
-import FoundatiomXML
+import FoundationXML
 #endif
 
 struct KeyedOrderedPlistEncodingContainer<Key>: KeyedEncodingContainerProtocol where Key: CodingKey {
