@@ -14,7 +14,7 @@ public struct OrderedPlistEncoder {
 
     /// Encodes a value to an ordered XML property list as `String`.
     public func encodeToString<Value>(_ value: Value) throws -> String where Value: Encodable {
-        try encodeToXML(value).xmlString
+        try encodeToXML(value).xmlString(options: .nodeCompactEmptyElement)
     }
 
     /// Encodes a value to an ordered XML property list as `XMLDocument`.
