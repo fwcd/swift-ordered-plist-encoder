@@ -7,6 +7,7 @@ private struct X: Codable, Hashable {
     let c: Int
 }
 
+@available(macOS 13.0, *)
 final class OrderedPlistEncoderTests: XCTestCase {
     func testRoundtrips() throws {
         try assertRoundtrips(23)
@@ -22,13 +23,13 @@ final class OrderedPlistEncoderTests: XCTestCase {
 
     func testCompactElements() throws {
         let encoder = OrderedPlistEncoder()
-        XCTAssertEqual(try encoder.encodeToString(true), wrapInDocument("<true/>"))
-        XCTAssertEqual(try encoder.encodeToString(true), wrapInDocument("<true/>"))
+        XCTAssertEqual(stripPrologue(try encoder.encodeToString(true)), wrapInPlist("<true/>"))
+        XCTAssertEqual(stripPrologue(try encoder.encodeToString(true)), wrapInPlist("<true/>"))
     }
 
     func testKeyOrder() throws {
         let encoder = OrderedPlistEncoder()
-        XCTAssertEqual(try encoder.encodeToString(X(b: "a", a: -1, c: 0)), wrapInDocument("<dict><key>b</key><string>a</string><key>a</key><integer>-1</integer><key>c</key><integer>0</integer></dict>"))
+        XCTAssertEqual(stripPrologue(try encoder.encodeToString(X(b: "a", a: -1, c: 0))), wrapInPlist("<dict><key>b</key><string>a</string><key>a</key><integer>-1</integer><key>c</key><integer>0</integer></dict>"))
     }
 
     private func assertRoundtrips<Value>(_ value: Value, line: UInt = #line) throws where Value: Codable & Equatable {
@@ -38,11 +39,15 @@ final class OrderedPlistEncoderTests: XCTestCase {
         XCTAssertEqual(roundtripped, value, line: line)
     }
 
-    private func wrapInDocument(_ inner: String) -> String {
+    private func wrapInPlist(_ xml: String) -> String {
         """
-        <?xml version="1.0" encoding="UTF-8"?>
         <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-        <plist version="1.0">\(inner)</plist>
+        <plist version="1.0">\(xml)</plist>
         """
+    }
+
+    private func stripPrologue(_ xml: String) -> String {
+        xml.replacing(try! Regex(#"<\?xml[^\?]+\?>"#), with: "")
+           .trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }
