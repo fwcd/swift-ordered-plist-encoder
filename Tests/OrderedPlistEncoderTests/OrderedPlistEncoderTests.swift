@@ -26,6 +26,11 @@ final class OrderedPlistEncoderTests: XCTestCase {
         XCTAssertEqual(try encoder.encodeToString(true), wrapInDocument("<true/>"))
     }
 
+    func testKeyOrder() throws {
+        let encoder = OrderedPlistEncoder()
+        XCTAssertEqual(try encoder.encodeToString(X(b: "a", a: -1, c: 0)), wrapInDocument("<dict><key>b</key><string>a</string><key>a</key><integer>-1</integer><key>c</key><integer>0</integer></dict>"))
+    }
+
     private func assertRoundtrips<Value>(_ value: Value, line: UInt = #line) throws where Value: Codable & Equatable {
         let encoder = OrderedPlistEncoder()
         let decoder = PropertyListDecoder()
