@@ -57,6 +57,8 @@ public struct OrderedPlistEncoder {
         rootElement.addChild(encoder.element)
 
         let document = XMLDocument()
+        document.version = "1.0"
+        document.characterEncoding = "UTF-8"
         document.dtd = dtd
         document.addChild(rootElement)
 
