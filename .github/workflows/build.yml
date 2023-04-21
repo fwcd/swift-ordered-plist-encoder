@@ -24,4 +24,5 @@ jobs:
     - name: Build
       run: swift build
     - name: Test
+      if: matrix.os != 'macos-latest' # until macOS 13 images are available (which we need for Regex)
       run: swift test
