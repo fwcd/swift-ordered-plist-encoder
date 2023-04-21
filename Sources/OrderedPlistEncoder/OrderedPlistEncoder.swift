@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(FoundationXML)
+import FoundationXML
+#endif
 
 /// An encoder that encodes to an ordered XML property list.
 public struct OrderedPlistEncoder {
