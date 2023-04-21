@@ -1,6 +1,7 @@
 # Ordered Property List Encoder for Swift
 
 [![Build](https://github.com/fwcd/swift-ordered-plist-encoder/actions/workflows/build.yml/badge.svg)](https://github.com/fwcd/swift-ordered-plist-encoder/actions/workflows/build.yml)
+[![Docs](https://github.com/fwcd/swift-ordered-plist-encoder/actions/workflows/docs.yml/badge.svg)](https://fwcd.github.io/swift-ordered-plist-encoder/documentation/orderedplistencoder)
 
 A custom XML property list encoder for Swift that encodes keys in the same order as they were declared, primarily intended for interoperability with legacy formats.
 
