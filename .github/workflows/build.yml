@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: ['ubuntu-latest', 'macos-latest']
+        os: ['ubuntu-latest', 'macos-13']
         swift: ['5.7']
 
     steps:
@@ -24,5 +24,4 @@ jobs:
     - name: Build
       run: swift build
     - name: Test
-      if: startsWith(matrix.os, 'ubuntu') # until macOS 13 images are available (which we need for Regex)
       run: swift test
