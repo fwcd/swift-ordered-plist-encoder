@@ -85,7 +85,13 @@ struct SingleValueOrderedPlistEncodingContainer: SingleValueEncodingContainer {
     }
 
     mutating func encode<T>(_ value: T) throws where T: Encodable {
-        let encoder = OrderedPlistEncoderImpl(element: element, codingPath: codingPath)
-        try value.encode(to: encoder)
+        switch value {
+        case let value as Data:
+            element.name = "data"
+            element.stringValue = value.base64EncodedString()
+        default:
+            let encoder = OrderedPlistEncoderImpl(element: element, codingPath: codingPath)
+            try value.encode(to: encoder)
+        }
     }
 }

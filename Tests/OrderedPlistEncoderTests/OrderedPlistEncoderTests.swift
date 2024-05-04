@@ -19,6 +19,7 @@ final class OrderedPlistEncoderTests: XCTestCase {
         try assertRoundtrips(["hello": "a", "world": "b"])
         try assertRoundtrips(true)
         try assertRoundtrips(X(b: "abc", a: 3, c: -9))
+        try assertRoundtrips(Data([1, 2, 3]))
     }
 
     func testCompactElements() throws {
@@ -30,6 +31,11 @@ final class OrderedPlistEncoderTests: XCTestCase {
     func testKeyOrder() throws {
         let encoder = OrderedPlistEncoder()
         XCTAssertEqual(stripPrologue(try encoder.encodeToString(X(b: "a", a: -1, c: 0))), wrapInPlist("<dict><key>b</key><string>a</string><key>a</key><integer>-1</integer><key>c</key><integer>0</integer></dict>"))
+    }
+
+    func testData() throws {
+        let encoder = OrderedPlistEncoder()
+        XCTAssertEqual(stripPrologue(try encoder.encodeToString(Data([1, 2, 3]))), wrapInPlist("<data>AQID</data>"))
     }
 
     private func assertRoundtrips<Value>(_ value: Value, line: UInt = #line) throws where Value: Codable & Equatable {

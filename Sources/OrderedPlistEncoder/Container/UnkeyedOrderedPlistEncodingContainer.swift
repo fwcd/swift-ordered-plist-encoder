@@ -120,7 +120,7 @@ struct UnkeyedOrderedPlistEncodingContainer: UnkeyedEncodingContainer {
 
     mutating func encode<T>(_ value: T) throws where T: Encodable {
         try encodeItem { container in
-            try container.encode(value)
+            try container.encode(EncodableValue(value))
         }
     }
 

@@ -45,7 +45,7 @@ public struct OrderedPlistEncoder {
     /// Encodes a value to an ordered XML property list as `XMLDocument`.
     public func encodeToXML<Value>(_ value: Value) throws -> XMLDocument where Value: Encodable {
         let encoder = OrderedPlistEncoderImpl()
-        try value.encode(to: encoder)
+        try EncodableValue(value).encode(to: encoder)
 
         let dtd = XMLDTD()
         dtd.name = "plist"

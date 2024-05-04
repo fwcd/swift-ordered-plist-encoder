@@ -120,7 +120,7 @@ struct KeyedOrderedPlistEncodingContainer<Key>: KeyedEncodingContainerProtocol w
 
     mutating func encode<T>(_ value: T, forKey key: Key) throws where T: Encodable {
         try encodeChild(forKey: key) { container in
-            try container.encode(value)
+            try container.encode(EncodableValue(value))
         }
     }
 
