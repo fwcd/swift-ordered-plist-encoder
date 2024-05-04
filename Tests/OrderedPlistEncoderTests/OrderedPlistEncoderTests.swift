@@ -46,6 +46,11 @@ final class OrderedPlistEncoderTests: XCTestCase {
         XCTAssertEqual(stripPrologue(try encoder.encodeToString(Data([1, 2, 3]))), wrapInPlist("<data>AQID</data>"))
     }
 
+    func testDate() throws {
+        let encoder = OrderedPlistEncoder()
+        XCTAssertEqual(stripPrologue(try encoder.encodeToString(Date(timeIntervalSince1970: 12000))), wrapInPlist("<date>1970-01-01T03:20:00Z</date>"))
+    }
+
     private func assertRoundtrips<Value>(_ value: Value, line: UInt = #line) throws where Value: Codable & Equatable {
         let encoder = OrderedPlistEncoder()
         let decoder = PropertyListDecoder()
