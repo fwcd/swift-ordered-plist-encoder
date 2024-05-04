@@ -7,6 +7,12 @@ private struct X: Codable, Hashable {
     let c: Int
 }
 
+private struct Y: Codable, Hashable {
+    let dummy: Int
+    let data: Data
+    let date: Date
+}
+
 @available(macOS 13.0, *)
 final class OrderedPlistEncoderTests: XCTestCase {
     func testRoundtrips() throws {
@@ -20,6 +26,8 @@ final class OrderedPlistEncoderTests: XCTestCase {
         try assertRoundtrips(true)
         try assertRoundtrips(X(b: "abc", a: 3, c: -9))
         try assertRoundtrips(Data([1, 2, 3]))
+        // NOTE: We cannot use `Date()` since the encoding of dates as ISO8601 causes some loss of precision
+        try assertRoundtrips(Y(dummy: -10, data: Data([1, 2, 3]), date: Date(timeIntervalSince1970: 12000)))
     }
 
     func testCompactElements() throws {

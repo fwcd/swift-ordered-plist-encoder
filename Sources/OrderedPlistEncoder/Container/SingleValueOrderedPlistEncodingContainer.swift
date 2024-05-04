@@ -89,6 +89,9 @@ struct SingleValueOrderedPlistEncodingContainer: SingleValueEncodingContainer {
         case let value as Data:
             element.name = "data"
             element.stringValue = value.base64EncodedString()
+        case let value as Date:
+            element.name = "date"
+            element.stringValue = ISO8601DateFormatter().string(from: value)
         default:
             let encoder = OrderedPlistEncoderImpl(element: element, codingPath: codingPath)
             try value.encode(to: encoder)
