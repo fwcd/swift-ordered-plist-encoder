@@ -16,7 +16,7 @@ struct KeyedOrderedPlistEncodingContainer<Key>: KeyedEncodingContainerProtocol w
 
     private mutating func addChildElement(forKey key: Key) -> XMLElement {
         // TODO: Add check for duplicate keys (should we throw an EncodingError?)
-        let childElement: XMLElement = .init()
+        let childElement = XMLElement(kind: .comment)
         element.addChild(XMLElement(name: "key", stringValue: key.stringValue))
         element.addChild(childElement)
         return childElement
