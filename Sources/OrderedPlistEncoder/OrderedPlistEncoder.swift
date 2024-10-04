@@ -4,7 +4,7 @@ import FoundationXML
 #endif
 
 /// An encoder that encodes to an ordered XML property list.
-public struct OrderedPlistEncoder {
+public struct OrderedPlistEncoder: Sendable {
     public var options: Options
 
     public init(options: Options = []) {
@@ -49,7 +49,7 @@ public struct OrderedPlistEncoder {
 }
 
 extension OrderedPlistEncoder {
-    public struct Options: OptionSet {
+    public struct Options: OptionSet, Sendable {
         public let rawValue: UInt
 
         public static let prettyPrinted = Self(rawValue: 1 << 0)
