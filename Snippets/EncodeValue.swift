@@ -18,8 +18,8 @@ let planets = [
     Planet(name: "Pluto", mass: 1.3e22),
 ]
 
-let encoder = OrderedPlistEncoder(options: [
-    .prettyPrinted,
-])
+let encoder = OrderedPlistEncoder(options: .init(
+    prettyPrint: .init(indentSize: 1)
+))
 
 print(try encoder.encodeToString(planets))

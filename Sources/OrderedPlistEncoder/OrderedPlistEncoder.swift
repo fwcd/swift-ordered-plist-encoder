@@ -3,11 +3,14 @@ import Foundation
 import FoundationXML
 #endif
 
+/// Matches line indents, along with the preceding newline (due to the lack of support for lookbehind).
+nonisolated(unsafe) private let indentRegex = #/(?<prefix>(?:^|\n))(?<indent>[ \t]+)/#
+
 /// An encoder that encodes to an ordered XML property list.
 public struct OrderedPlistEncoder: Sendable {
     public var options: Options
 
-    public init(options: Options = []) {
+    public init(options: Options = .init()) {
         self.options = options
     }
 
@@ -21,7 +24,24 @@ public struct OrderedPlistEncoder: Sendable {
 
     /// Encodes a value to an ordered XML property list as `String`.
     public func encodeToString<Value>(_ value: Value) throws -> String where Value: Encodable {
-        try encodeToXML(value).xmlString(options: .init(options))
+        let document = try encodeToXML(value)
+        var xmlString = document.xmlString(options: .init(options))
+
+        // Unfortunately, Foundation's XMLNode provides no native way to
+        // customize the indent size, so we need to patch it manually
+        // (or implement #3, but patching the indent seems safer than
+        // handling potential edge cases with escaping for now)
+        if let targetIndentSize = options.prettyPrint?.indentSize,
+           let sourceIndentSize = (try? indentRegex.firstMatch(in: xmlString))?.output.indent.count {
+            let targetIndent = String(repeating: " ", count: targetIndentSize)
+            let sourceIndent = String(repeating: " ", count: sourceIndentSize)
+
+            xmlString.replace(indentRegex) { match in
+                match.output.prefix + match.output.indent.replacing(sourceIndent, with: targetIndent)
+            }
+        }
+
+        return xmlString
     }
 
     /// Encodes a value to an ordered XML property list as `XMLDocument`.
@@ -49,13 +69,19 @@ public struct OrderedPlistEncoder: Sendable {
 }
 
 extension OrderedPlistEncoder {
-    public struct Options: OptionSet, Sendable {
-        public let rawValue: UInt
+    public struct Options: Sendable {
+        public var prettyPrint: PrettyPrint?
 
-        public static let prettyPrinted = Self(rawValue: 1 << 0)
+        public struct PrettyPrint: Sendable {
+            public var indentSize: Int?
 
-        public init(rawValue: UInt) {
-            self.rawValue = rawValue
+            public init(indentSize: Int? = nil) {
+                self.indentSize = indentSize
+            }
+        }
+
+        public init(prettyPrint: PrettyPrint? = nil) {
+            self.prettyPrint = prettyPrint
         }
     }
 }
@@ -63,7 +89,7 @@ extension OrderedPlistEncoder {
 extension XMLNode.Options {
     init(_ options: OrderedPlistEncoder.Options) {
         self = .nodeCompactEmptyElement
-        if options.contains(.prettyPrinted) {
+        if options.prettyPrint != nil {
             insert(.nodePrettyPrint)
         }
     }
