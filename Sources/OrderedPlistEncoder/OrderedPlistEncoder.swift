@@ -31,11 +31,8 @@ public struct OrderedPlistEncoder: Sendable {
         // customize the indent size, so we need to patch it manually
         // (or implement #3, but patching the indent seems safer than
         // handling potential edge cases with escaping for now)
-        if let targetIndentSize = options.prettyPrint?.indentSize,
-           let sourceIndentSize = (try? indentRegex.firstMatch(in: xmlString))?.output.indent.count {
-            let targetIndent = String(repeating: " ", count: targetIndentSize)
-            let sourceIndent = String(repeating: " ", count: sourceIndentSize)
-
+        if let targetIndent = options.prettyPrint?.indent,
+           let sourceIndent = (try? indentRegex.firstMatch(in: xmlString))?.output.indent {
             xmlString.replace(indentRegex) { match in
                 match.output.prefix + match.output.indent.replacing(sourceIndent, with: targetIndent)
             }
@@ -73,10 +70,10 @@ extension OrderedPlistEncoder {
         public var prettyPrint: PrettyPrint?
 
         public struct PrettyPrint: Sendable {
-            public var indentSize: Int?
+            public var indent: String?
 
-            public init(indentSize: Int? = nil) {
-                self.indentSize = indentSize
+            public init(indent: String? = nil) {
+                self.indent = indent
             }
         }
 

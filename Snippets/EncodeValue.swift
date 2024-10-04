@@ -19,7 +19,7 @@ let planets = [
 ]
 
 let encoder = OrderedPlistEncoder(options: .init(
-    prettyPrint: .init(indentSize: 1)
+    prettyPrint: .init(indent: "  ")
 ))
 
 print(try encoder.encodeToString(planets))
