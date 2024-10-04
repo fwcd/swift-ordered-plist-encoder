@@ -32,9 +32,10 @@ public struct OrderedPlistEncoder: Sendable {
         // (or implement #3, but patching the indent seems safer than
         // handling potential edge cases with escaping for now)
         if let targetIndent = options.prettyPrint?.indent,
-           let sourceIndent = (try? indentRegex.firstMatch(in: xmlString))?.output.indent {
+           let sourceIndentSize = (try? indentRegex.firstMatch(in: xmlString))?.output.indent.count {
             xmlString.replace(indentRegex) { match in
-                match.output.prefix + match.output.indent.replacing(sourceIndent, with: targetIndent)
+                let indentLevel = match.output.indent.count / sourceIndentSize
+                return match.output.prefix + String(repeating: targetIndent, count: indentLevel)
             }
         }
 
