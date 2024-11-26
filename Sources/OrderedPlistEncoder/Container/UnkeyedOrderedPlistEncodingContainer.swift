@@ -16,7 +16,7 @@ struct UnkeyedOrderedPlistEncodingContainer: UnkeyedEncodingContainer {
     }
 
     private mutating func addItemElement() -> XMLElement {
-        let itemElement: XMLElement = .init()
+        let itemElement = XMLElement(kind: .comment)
         element.addChild(itemElement)
         count += 1
         return itemElement
